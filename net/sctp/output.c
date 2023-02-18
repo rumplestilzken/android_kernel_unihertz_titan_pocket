@@ -499,7 +499,7 @@ merge:
 		}
 
 		if (gso) {
-			if (skb_gro_receive(&head, nskb)) {
+			if (skb_gro_receive(head, nskb)) {
 				kfree_skb(nskb);
 				return 0;
 			}

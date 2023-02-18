@@ -29,6 +29,9 @@ ccflags-y += -I$(srctree)/drivers/misc/mediatek/mmdvfs/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/base/power/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/base/power/$(CONFIG_MTK_PLATFORM)\
 
+ccflags-y += -Wpointer-arith -I$(srctree)/drivers/devfreq/
+subdir-ccflags-y += -Wpointer-arith -I$(srctree)/drivers/devfreq/
+
 ifeq ($(CONFIG_MTK_QOS_SUPPORT), y)
 obj-$(CONFIG_MACH_MT6771)		+= helio-dvfsrc.o helio-dvfsrc-sysfs.o
 obj-$(CONFIG_MACH_MT6771)		+= helio-dvfsrc-mt6771.o

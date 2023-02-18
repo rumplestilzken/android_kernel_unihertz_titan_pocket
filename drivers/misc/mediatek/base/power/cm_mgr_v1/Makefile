@@ -15,6 +15,8 @@ ifeq ($(CONFIG_MTK_GCOV_KERNEL),y)
 GCOV_PROFILE := y
 endif
 
+ccflags-y += -Wpointer-arith
+
 ifeq (,$(filter $(CONFIG_MTK_PLATFORM), "mt6771"))
 ifdef CONFIG_MTK_PLATFORM
 MTK_PLATFORM := $(subst ",,$(CONFIG_MTK_PLATFORM))

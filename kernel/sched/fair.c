@@ -42,6 +42,8 @@
 #include "eas_plus.h"
 #include "hmp.h"
 
+extern void arch_build_cpu_topology_domain(void);
+
 /*
  * Targeted preemption latency for CPU-bound tasks:
  *
