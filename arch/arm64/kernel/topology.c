@@ -31,12 +31,6 @@
 
 #include "topology_dts.c"
 
-/*
- * cpu topology table
- */
-struct cpu_topology cpu_topology[NR_CPUS];
-EXPORT_SYMBOL_GPL(cpu_topology);
-
 static int __init get_cpu_for_node(struct device_node *node)
 {
 	struct device_node *cpu_node;
@@ -216,6 +210,12 @@ out:
 	of_node_put(cn);
 	return ret;
 }
+
+/*
+ * cpu topology table
+ */
+struct cpu_topology_arm64 cpu_topology[NR_CPUS];
+EXPORT_SYMBOL_GPL(cpu_topology);
 
 const struct cpumask *cpu_coregroup_mask(int cpu)
 {
