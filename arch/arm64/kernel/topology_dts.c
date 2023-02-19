@@ -229,7 +229,7 @@ int arch_get_nr_clusters(void)
 
 	/* assume socket id is monotonic increasing without gap. */
 	for_each_possible_cpu(cpu) {
-		struct cpu_topology *cpu_topo = &cpu_topology[cpu];
+		struct cpu_topology_arm64 *cpu_topo = &cpu_topology[cpu];
 
 		if (cpu_topo->cluster_id > max_id)
 			max_id = cpu_topo->cluster_id;
@@ -245,7 +245,7 @@ int arch_is_multi_cluster(void)
 
 int arch_get_cluster_id(unsigned int cpu)
 {
-	struct cpu_topology *cpu_topo = &cpu_topology[cpu];
+	struct cpu_topology_arm64 *cpu_topo = &cpu_topology[cpu];
 
 	return cpu_topo->cluster_id < 0 ? 0 : cpu_topo->cluster_id;
 }
@@ -256,7 +256,7 @@ void arch_get_cluster_cpus(struct cpumask *cpus, int cluster_id)
 
 	cpumask_clear(cpus);
 	for_each_possible_cpu(cpu) {
-		struct cpu_topology *cpu_topo = &cpu_topology[cpu];
+		struct cpu_topology_arm64 *cpu_topo = &cpu_topology[cpu];
 
 		if (cpu_topo->cluster_id == cluster_id)
 			cpumask_set_cpu(cpu, cpus);

@@ -214,7 +214,7 @@ out:
 /*
  * cpu topology table
  */
-struct cpu_topology cpu_topology[NR_CPUS];
+struct cpu_topology_arm64 cpu_topology[NR_CPUS];
 EXPORT_SYMBOL_GPL(cpu_topology);
 
 const struct cpumask *cpu_coregroup_mask(int cpu)
@@ -224,7 +224,7 @@ const struct cpumask *cpu_coregroup_mask(int cpu)
 
 static void update_siblings_masks(unsigned int cpuid)
 {
-	struct cpu_topology *cpu_topo, *cpuid_topo = &cpu_topology[cpuid];
+	struct cpu_topology_arm64 *cpu_topo, *cpuid_topo = &cpu_topology[cpuid];
 	int cpu;
 
 	/* update core and thread sibling masks */
@@ -249,7 +249,7 @@ static void update_siblings_masks(unsigned int cpuid)
 
 void store_cpu_topology(unsigned int cpuid)
 {
-	struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
+	struct cpu_topology_arm64 *cpuid_topo = &cpu_topology[cpuid];
 	u64 mpidr;
 
 	if (cpuid_topo->cluster_id != -1)
@@ -342,7 +342,7 @@ static void __init reset_cpu_topology(void)
 	unsigned int cpu;
 
 	for_each_possible_cpu(cpu) {
-		struct cpu_topology *cpu_topo = &cpu_topology[cpu];
+		struct cpu_topology_arm64 *cpu_topo = &cpu_topology[cpu];
 
 		cpu_topo->thread_id = -1;
 		cpu_topo->core_id = 0;
