@@ -214,7 +214,7 @@ out:
 /*
  * cpu topology table
  */
-struct cpu_topology_arm64 cpu_topology[NR_CPUS];
+struct cpu_topology cpu_topology[NR_CPUS];
 EXPORT_SYMBOL_GPL(cpu_topology);
 
 const struct cpumask *cpu_coregroup_mask(int cpu)
