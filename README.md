@@ -15,7 +15,10 @@ sudo apt install build-essential libssl-dev gcc-aarch64-linux-gnu
 ## Build Kernel 
 ```
 cd unihertz_titan_kernel
-make config
+export CROSS_COMPILE="aarch64-linux-gnu" # This is my version of the cross compiler, yours may be different
+export CONFIG_MTK_GPIO=y
+make ARCH=arm64 CONFIG=arch/arm64/configs/titan_defconf defconfig #generate .config
+make ARCH=arm64 CONFIG=arch/arm64/configs/titan_defconf
 ```
 
 Modify include/kernel/config/auto.conf key CONFIG_SYSTEM_TRUSTED_KEYS value to ""
