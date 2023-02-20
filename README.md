@@ -16,7 +16,8 @@ sudo apt install build-essential libssl-dev gcc-aarch64-linux-gnu
 ```
 cd unihertz_titan_kernel
 export CROSS_COMPILE="aarch64-linux-gnu" # This is my version of the cross compiler, yours may be different
-export CONFIG_MTK_GPIO=y
+export CONFIG_MTK_GPIO=y # fixes pinctrl-mtk-common-v2_debug duplicate functions
+
 make ARCH=arm64 CONFIG=arch/arm64/configs/titan_defconf defconfig #generate .config
 make ARCH=arm64 CONFIG=arch/arm64/configs/titan_defconf
 ```
