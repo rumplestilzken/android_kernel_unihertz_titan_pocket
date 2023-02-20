@@ -49,7 +49,7 @@
 static int crashing_cpu;
 
 /* note_buf_t defined in linux/crash_core.h included by linux/kexec.h */
-static note_buf_t __percpu *crash_notes;
+note_buf_t __percpu *crash_notes;
 
 static unsigned long mrdump_output_lbaooo;
 
@@ -81,7 +81,7 @@ static void mrdump_final_note(u32 *buf)
 	memcpy(buf, &note, sizeof(note));
 }
 
-static void crash_save_cpu(struct pt_regs *regs, int cpu)
+void crash_save_cpu(struct pt_regs *regs, int cpu)
 {
 	struct elf_prstatus prstatus;
 	u32 *buf;

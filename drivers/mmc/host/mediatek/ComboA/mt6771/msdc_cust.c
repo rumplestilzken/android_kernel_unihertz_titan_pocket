@@ -27,7 +27,7 @@
 #include <linux/slab.h>
 #include <linux/of_gpio.h>
 
-#include "mtk_sd.h"
+#include <mtk_sd.h>
 #include "dbg.h"
 #ifdef POWER_READY
 #include "include/pmic_regulator.h"

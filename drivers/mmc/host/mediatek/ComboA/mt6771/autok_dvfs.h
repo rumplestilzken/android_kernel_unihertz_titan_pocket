@@ -16,7 +16,7 @@
 
 #define VCOREFS_READY
 
-#include "autok.h"
+#include <autok.h>
 
 #ifdef VCOREFS_READY
 #include <mtk_vcorefs_manager.h>
