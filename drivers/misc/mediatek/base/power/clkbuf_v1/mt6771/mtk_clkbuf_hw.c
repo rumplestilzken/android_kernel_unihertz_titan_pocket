@@ -307,29 +307,31 @@ static void clk_buf_ctrl_bblpm_mask(enum clk_buf_id id, bool onoff)
 
 	mutex_lock(&clk_buf_ctrl_lock);
 
+    unsigned int onoffvalue = onoff ? 1 : 0;
+
 	switch (id) {
 	case CLK_BUF_BB_MD:
-		pmic_config_interface(PMIC_XO_BUF1_BBLPM_EN_MASK_ADDR, onoff,
+		pmic_config_interface(PMIC_XO_BUF1_BBLPM_EN_MASK_ADDR, onoffvalue,
 				      PMIC_XO_BUF1_BBLPM_EN_MASK_MASK,
 				      PMIC_XO_BUF1_BBLPM_EN_MASK_SHIFT);
 		break;
 	case CLK_BUF_CONN:
-		pmic_config_interface(PMIC_XO_BUF2_BBLPM_EN_MASK_ADDR, onoff,
+		pmic_config_interface(PMIC_XO_BUF2_BBLPM_EN_MASK_ADDR, onoffvalue,
 				      PMIC_XO_BUF2_BBLPM_EN_MASK_MASK,
 				      PMIC_XO_BUF2_BBLPM_EN_MASK_SHIFT);
 		break;
 	case CLK_BUF_NFC:
-		pmic_config_interface(PMIC_XO_BUF3_BBLPM_EN_MASK_ADDR, onoff,
+		pmic_config_interface(PMIC_XO_BUF3_BBLPM_EN_MASK_ADDR, onoffvalue,
 				      PMIC_XO_BUF3_BBLPM_EN_MASK_MASK,
 				      PMIC_XO_BUF3_BBLPM_EN_MASK_SHIFT);
 		break;
 	case CLK_BUF_RF:
-		pmic_config_interface(PMIC_XO_BUF4_BBLPM_EN_MASK_ADDR, onoff,
+		pmic_config_interface(PMIC_XO_BUF4_BBLPM_EN_MASK_ADDR, onoffvalue,
 				      PMIC_XO_BUF4_BBLPM_EN_MASK_MASK,
 				      PMIC_XO_BUF4_BBLPM_EN_MASK_SHIFT);
 		break;
 	case CLK_BUF_UFS:
-		pmic_config_interface(PMIC_XO_BUF7_BBLPM_EN_MASK_ADDR, onoff,
+		pmic_config_interface(PMIC_XO_BUF7_BBLPM_EN_MASK_ADDR, onoffvalue,
 				      PMIC_XO_BUF7_BBLPM_EN_MASK_MASK,
 				      PMIC_XO_BUF7_BBLPM_EN_MASK_SHIFT);
 		break;
