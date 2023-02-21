@@ -3,6 +3,10 @@
 # Makefile for the linux kernel.
 #
 
+#Allow pointer addition and subtraction in kernel.h
+ccflags-y += -Wpointer-arith
+subdir-ccflags-y += -Wpointer-arith
+
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/include
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/include/mt-plat
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/mtprof
