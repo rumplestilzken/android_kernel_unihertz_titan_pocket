@@ -1,4 +1,3 @@
-ccflags-y += -Wformat=0 -Wno-unused-variable -Wno-unused-function
 subdir-ccflags-y += -Werror
 
 mediatek-drm-y := mtk_drm_drv.o \
