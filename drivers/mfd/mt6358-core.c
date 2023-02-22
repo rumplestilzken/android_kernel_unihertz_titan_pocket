@@ -37,6 +37,8 @@
 #include <linux/mfd/mt6358/core.h>
 
 #if defined(CONFIG_MACH_MT6771)
+//Seemingly not added as part of CONFIG_MTK_PMIC_CHIP_MT6358
+#include <linux/mfd/mt6358/irq.h>
 //Fix for PMIC_RG_PWRHOLD_ADDR undelcared
 #include <mach/upmu_hw.h>
 #endif
