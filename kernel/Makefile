@@ -4,8 +4,8 @@
 #
 
 #Allow pointer addition and subtraction in kernel.h
-ccflags-y += -Wpointer-arith
-subdir-ccflags-y += -Wpointer-arith
+#ccflags-y += -Wpointer-arith
+#subdir-ccflags-y += -Wpointer-arith
 
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/include
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/include/mt-plat
