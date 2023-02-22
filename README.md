@@ -26,7 +26,7 @@ Modify include/kernel/config/auto.conf key CONFIG_SYSTEM_TRUSTED_KEYS value to "
 
 This operation is going to take a *very* long time.
 ```
-make ARCH=arm64 CONFIG=arch/arm64/configs/titan_defconf #-j# of processors for speed
+make ARCH=arm64 CONFIG=arch/arm64/configs/titan_defconf
 ```
 
 # Credits to NotKit for providing a base with which to start this development.
