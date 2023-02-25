@@ -18,6 +18,7 @@
  */
 
 #include <mtk_spm.h>
+#include <mtk_spm_misc.h>
 #include <mtk_clkbuf_ctl.h>
 #include <mtk_clkbuf_common.h>
 #ifdef CONFIG_MTK_UFS_SUPPORT
