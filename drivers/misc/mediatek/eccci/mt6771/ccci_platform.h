@@ -16,7 +16,7 @@
 
 #include <mt-plat/sync_write.h>
 #include "ccci_config.h"
-#include "modem_sys.h"
+#include <modem_sys.h>
 #include "hif/ccci_hif_cldma.h"
 
 /* the last EMI bank, properly not used */
