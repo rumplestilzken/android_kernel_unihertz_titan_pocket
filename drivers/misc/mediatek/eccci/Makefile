@@ -27,6 +27,7 @@ ifeq ($(CONFIG_MTK_ECCCI_DRIVER), y)
 obj-$(CONFIG_MTK_ECCCI_DRIVER) := ccci.o
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/eccci/inc/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/eccci/$(MTK_PLATFORM)
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/eccci/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/ccmni/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/conn_md/include/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/base/power/$(MTK_PLATFORM)
