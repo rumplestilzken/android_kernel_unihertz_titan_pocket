@@ -8,7 +8,7 @@ subdir-ccflags-$(CONFIG_MTK_PMIC_CHIP_MT6358)+= -I$(srctree)/drivers/misc/mediat
 subdir-ccflags-$(CONFIG_MTK_PMIC_CHIP_MT6359)+= -I$(srctree)/drivers/misc/mediatek/pmic/include/mt6359
 subdir-ccflags-$(CONFIG_MTK_PMIC_CHIP_MT6359P)+= -I$(srctree)/drivers/misc/mediatek/pmic/include/mt6359p
 subdir-ccflags-$(CONFIG_MTK_PMIC_CHIP_MT6390)+= -I$(srctree)/drivers/misc/mediatek/pmic/include/mt6390
-subdir-ccflags-y-$(CONFIG_MTK_PMIC_CHIP_MT6771)+= -I$(srctree)/drivers/misc/mediatek/pmic/include/mt6771
+subdir-ccflags-$(CONFIG_MTK_PMIC_CHIP_MT6771)+= -I$(srctree)/drivers/misc/mediatek/pmic/include/mt6771
 
 obj-$(CONFIG_MTK_EXTBUCK) += extbuck/
 obj-$(CONFIG_MTK_PMIC_COMMON) += common/
