@@ -21,3 +21,4 @@ obj-y		+= gpio/
 obj-y		+= mclk/
 obj-y		+= imgsensor_cfg_table.o
 #obj-y           += imgsensor_oc.o
+obj-y += kd_camera_hw.o

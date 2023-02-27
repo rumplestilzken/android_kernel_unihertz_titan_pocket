@@ -14,9 +14,9 @@
 
 #include <linux/dma-mapping.h>
 //#include "kd_camera_typedef.h"
-#include "kd_imgsensor.h"
-#include "kd_imgsensor_define.h"
-#include "kd_imgsensor_errcode.h"
+#include <kd_imgsensor.h>
+#include <kd_imgsensor_define.h>
+#include <kd_imgsensor_errcode.h>
 
 #define PFX "OV16880_pdafotp"
 #define LOG_INF(fmt, args...)   pr_debug(PFX "[%s] " fmt, __FUNCTION__, ##args)
@@ -55,7 +55,7 @@ static bool _read_eeprom(u16 addr, BYTE* data, u32 size )
 {
 	int i = 0;
 	int offset = addr;
-	for(i = 0; i < size; i++) 
+	for(i = 0; i < size; i++)
 	{
 		if(!selective_read_eeprom(offset, &data[i]))
 		{
@@ -76,7 +76,7 @@ bool ov16880_read_eeprom( u16 addr, BYTE* data, u32 size)
 	addr = 0x0801;
 	size = TOTAL_DATA_SIZE;
 	LOG_INF("read ov16880 eeprom, addr = %d; size = %d\n", addr, size);
-	if(!get_done || last_size != size || last_offset != addr) 
+	if(!get_done || last_size != size || last_offset != addr)
 	{
 		if(!_read_eeprom(addr, eeprom_data, size))
 		{
@@ -93,9 +93,3 @@ bool ov16880_read_eeprom( u16 addr, BYTE* data, u32 size)
 	memcpy(data, eeprom_data, size);
   return true;
 }
-
-
-
-
-
-
