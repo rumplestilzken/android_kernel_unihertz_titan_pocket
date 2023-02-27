@@ -2,7 +2,7 @@
  *
  * Filename:
  * ---------
- *	 ov8865mipi_Sensor.h
+ *	 OV5693mipi_Sensor.h
  *
  * Project:
  * --------
@@ -13,8 +13,8 @@
  *	 CMOS sensor header file
  *
  ****************************************************************************/
-#ifndef _OV8865MIPI_SENSOR_H
-#define _OV8865MIPI_SENSOR_H
+#ifndef _IMX219MIPI_SENSOR_H
+#define _IMX219MIPI_SENSOR_H
 
 
 typedef enum{
@@ -74,11 +74,11 @@ typedef struct imgsensor_struct {
 
 /* SENSOR PRIVATE STRUCT FOR CONSTANT*/
 typedef struct imgsensor_info_struct { 
-	kal_uint16 sensor_id;			//record sensor id defined in Kd_imgsensor.h
+	kal_uint32 sensor_id;			//record sensor id defined in Kd_imgsensor.h
 	kal_uint32 checksum_value;		//checksum value for Camera Auto Test
 	imgsensor_mode_struct pre;		//preview scenario relative information
 	imgsensor_mode_struct cap;		//capture scenario relative information
-	imgsensor_mode_struct cap1;		//capture for PIP 24fps relative information
+	imgsensor_mode_struct cap1;		//capture for PIP 24fps relative information, capture1 mode must use same framelength, linelength with Capture mode for shutter calculate
 	imgsensor_mode_struct normal_video;//normal video  scenario relative information
 	imgsensor_mode_struct hs_video;	//high speed video scenario relative information
 	imgsensor_mode_struct slim_video;	//slim video for VT scenario relative information
@@ -104,16 +104,20 @@ typedef struct imgsensor_info_struct {
 	kal_uint8  sensor_interface_type;//sensor_interface_type
 	kal_uint8  mipi_sensor_type; //0,MIPI_OPHY_NCSI2; 1,MIPI_OPHY_CSI2, default is NCSI2, don't modify this para
 	kal_uint8  mipi_settle_delay_mode; //0, high speed signal auto detect; 1, use settle delay,unit is ns, default is auto detect, don't modify this para
-	kal_uint8  sensor_output_dataformat;
+	kal_uint8  sensor_output_dataformat;//sensor output first pixel color
 	kal_uint8  mclk;				//mclk value, suggest 24 or 26 for 24Mhz or 26Mhz
 	
 	kal_uint8  mipi_lane_num;		//mipi lane num
 	kal_uint8  i2c_addr_table[5];	//record sensor support all write id addr, only supprt 4must end with 0xff
 } imgsensor_info_struct;
 
+/* SENSOR READ/WRITE ID */
+//#define IMGSENSOR_WRITE_ID_1 (0x6c)
+//#define IMGSENSOR_READ_ID_1  (0x6d)
+//#define IMGSENSOR_WRITE_ID_2 (0x20)
+//#define IMGSENSOR_READ_ID_2  (0x21)
 
 extern int iReadRegI2C(u8 *a_pSendData , u16 a_sizeSendData, u8 * a_pRecvData, u16 a_sizeRecvData, u16 i2cId);
 extern int iWriteRegI2C(u8 *a_pSendData , u16 a_sizeSendData, u16 i2cId);
 
 #endif 
-
