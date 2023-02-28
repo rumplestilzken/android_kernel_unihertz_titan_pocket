@@ -14,7 +14,7 @@
 #ifndef _MTK_DRM_PMQOS_H_
 #define _MTK_DRM_PMQOS_H_
 
-#include "mmdvfs_pmqos.h"
+#include <mmdvfs_pmqos.h>
 #if defined(CONFIG_MACH_MT6779)
 #include "helio-dvfsrc-opp-mt6779.h"
 #elif defined(CONFIG_MACH_MT6885) || defined(CONFIG_MACH_MT6893)
