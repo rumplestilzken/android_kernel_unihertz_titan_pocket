@@ -18,6 +18,8 @@
 #include <linux/of_address.h>
 #include "include/pmic.h"
 
+#include <mtk_pmic_info.h>
+
 void PMIC_INIT_SETTING_V1(void)
 {
 	unsigned int chip_version = 0;
