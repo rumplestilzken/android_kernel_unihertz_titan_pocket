@@ -31,6 +31,8 @@
 #include <mt-plat/upmu_common.h>
 #include "include/pmic_regulator.h"
 #include "include/regulator_codegen.h"
+#include <mtk_regulator_codegen.h>
+#include <mtk_pmic_info.h>
 
 /*****************************************************************************
  * Global variable
