@@ -24,6 +24,7 @@
 #include <linux/regmap.h>
 #include <linux/mfd/mt6358/core.h>
 
+#include <mtk_pmic_info.h>
 #include <mt-plat/upmu_common.h>
 #include <mach/mtk_pmic.h>
 #include "include/pmic.h"
