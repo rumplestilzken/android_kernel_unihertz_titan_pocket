@@ -11,6 +11,8 @@
 # GNU General Public License for more details.
 #
 
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/m4u/$(MTK_PLATFORM)
+
 obj-y += $(subst ",,$(CONFIG_MTK_PLATFORM))/
 
 obj-$(CONFIG_MACH_MT6739) += 2.0/
