@@ -26,6 +26,7 @@
 #include "include/pmic_irq.h"
 #include "include/pmic_throttling_dlpt.h"
 #include "include/pmic_lbat_service.h"
+#include <mtk_pmic_info.h>
 
 /*-------pmic_dbg_level global variable-------*/
 unsigned int gPMICDbgLvl;
