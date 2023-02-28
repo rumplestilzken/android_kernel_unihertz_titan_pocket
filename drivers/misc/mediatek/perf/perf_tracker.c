@@ -44,7 +44,7 @@
 
 #include <mt-plat/perf_tracker.h>
 #include <linux/arch_topology.h>
-#include <perf_tracker_internal.h>
+#include "perf_tracker_internal.h"
 
 #ifdef CONFIG_MTK_SKB_OWNER
 #include <net/sock.h>
@@ -187,12 +187,12 @@ u32 __attribute__((weak)) qos_sram_read(u32 offset)
 	return 0;
 }
 
-int __attribute__((weak)) get_cur_vcore_uv()
+int __attribute__((weak)) get_cur_vcore_uv(void)
 {
 	return 0;
 }
 
-int __attribute__((weak)) get_cur_ddr_khz()
+int __attribute__((weak)) get_cur_ddr_khz(void)
 {
 	return 0;
 }
