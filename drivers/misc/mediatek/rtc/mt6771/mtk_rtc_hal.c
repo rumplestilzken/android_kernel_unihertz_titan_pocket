@@ -35,6 +35,8 @@
 #include <mach/mtk_pmic_wrap.h>
 #include <mtk_boot.h>
 
+#include <mtk_pmic_info.h>
+
 #include "include/pmic.h"
 
 #define hal_rtc_xinfo(fmt, args...)		\
