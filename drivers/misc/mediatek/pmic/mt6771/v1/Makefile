@@ -6,6 +6,9 @@ ccflags-y += -I$(srctree)/drivers/power/supply/mediatek/charger
 ccflags-y += -I$(srctree)/drivers/power/supply/mediatek/misc
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/usb_c/tcpc/inc
 
+ccflags-y += -Wpointer-arith -Wno-error
+subdir-ccflags-y += -Wpointer-arith -Wno-error
+
 subdir-ccflags-y += -Wpointer-arith -I$(srctree)/drivers/misc/mediatek/pmic/include
 
 ifeq ($(CONFIG_MTK_TINYSYS_SSPM_SUPPORT), y)
