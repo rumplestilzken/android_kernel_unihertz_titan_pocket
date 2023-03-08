@@ -17,7 +17,7 @@
 #ifdef CONFIG_MTK_AEE_FEATURE
 #  include "mt-plat/aee.h"
 #endif
-#include "display_recorder.h"
+#include <display_recorder.h>
 #include "ddp_debug.h"
 #include "disp_drv_log.h"
 
