@@ -16,5 +16,8 @@
 #
 #
 ################################################################################
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/video/$(MTK_PLATFORM)/dispsys/
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/video/$(MTK_PLATFORM)/videox/
+
 obj-$(CONFIG_MTK_FB) += dispsys/
 obj-$(CONFIG_MTK_FB) += videox/
