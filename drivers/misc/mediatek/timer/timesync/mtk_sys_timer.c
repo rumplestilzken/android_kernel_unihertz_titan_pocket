@@ -32,15 +32,15 @@
 #include <linux/math64.h>
 #include <mt-plat/sync_write.h>
 #include <mt-plat/mtk_sys_timer.h>
-#include <mtk_sys_timer_typedefs.h>
+#include "mtk_sys_timer_typedefs.h"
 #if defined(CONFIG_MTK_TINYSYS_MCUPM_SUPPORT) || \
 defined(CONFIG_MTK_TINYSYS_SSPM_SUPPORT)
-#include <mtk_sys_timer_mbox.h>
+#include "mtk_sys_timer_mbox.h"
 #endif
 
 
 #ifdef CONFIG_MTK_TINYSYS_SSPM_SUPPORT
-#include <mtk_sys_timer_mbox.h>
+#include "mtk_sys_timer_mbox.h"
 #include <sspm_define.h>
 
 #ifndef SSPM_V2
