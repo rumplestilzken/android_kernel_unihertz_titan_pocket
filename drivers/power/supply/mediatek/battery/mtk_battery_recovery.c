@@ -47,7 +47,7 @@
 #include <string.h>
 #endif
 
-#include <mtk_gauge_class.h>
+#include "mtk_gauge_class.h"
 #include "mtk_battery_internal.h"
 #include "mtk_battery_recovery.h"
 
