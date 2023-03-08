@@ -27,8 +27,8 @@
 #include <aee.h>
 
 #include <smi_conf.h>
-#include <smi_public.h>
-#include <smi_pmqos.h>
+#include "smi_public.h"
+#include "smi_pmqos.h"
 #include <mmdvfs_pmqos.h>
 #if IS_ENABLED(CONFIG_MEDIATEK_EMI)
 #include <memory/mediatek/emi.h>
@@ -43,7 +43,7 @@
 #include <m4u.h>
 #endif
 #ifdef MMDVFS_HOOK
-#include <mmdvfs_mgr.h>
+#include "mmdvfs_mgr.h"
 #endif
 
 #if IS_ENABLED(CONFIG_MTK_TINYSYS_SSPM_SUPPORT) && IS_ENABLED(SMI_SSPM)
