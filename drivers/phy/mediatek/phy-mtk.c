@@ -18,7 +18,7 @@
 #include <linux/phy/phy.h>
 
 #include <linux/phy/mediatek/mtk_usb_phy.h>
-#include <phy-mtk.h>
+#include "phy-mtk.h"
 
 #define DRIVER_NAME "mtk_phy"
 
