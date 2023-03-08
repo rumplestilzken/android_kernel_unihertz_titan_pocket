@@ -51,7 +51,7 @@
 #endif
 
 #if !defined(CONFIG_FPGA_EARLY_PORTING)
-#include "mtk_pmic_info.h"
+#include <mtk_pmic_info.h>
 #include "mtk_spm_vcore_dvfs.h"
 #endif
 
