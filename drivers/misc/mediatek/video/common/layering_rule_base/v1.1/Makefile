@@ -25,6 +25,7 @@ ccflags-y += \
                                 -I$(srctree)/drivers/misc/mediatek/video/$(MTK_PLATFORM)/videox \
                                 -I$(srctree)/drivers/misc/mediatek/sync/      \
                                 -I$(srctree)/drivers/misc/mediatek/lcm/inc/ \
+																-I$(srctree)/drivers/misc/mediatek/video/common/layering_rule_base/v1.1/
 
 ifeq (y, $(filter y, $(CONFIG_MACH_MT6833)))
 ccflags-y += \
@@ -35,4 +36,3 @@ ccflags-y += \
                                 -I$(srctree)/drivers/misc/mediatek/cmdq/v3/ \
                                 -I$(srctree)/drivers/misc/mediatek/cmdq/v3/$(MTK_PLATFORM)/
 endif
-
