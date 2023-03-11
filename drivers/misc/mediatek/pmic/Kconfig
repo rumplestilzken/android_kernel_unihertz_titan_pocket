@@ -112,16 +112,6 @@ config MTK_PMIC_CHIP_MT6335
 	  Set y to support this driver.
 	  Set n and choose other chip.
 
-config MTK_PMIC_CHIP_MT6771
-	tristate "MediaTek Power MT6771 Driver"
-	default n
-	---help---
-	  This selects for MediaTek(R) PMIC MT6771 driver.
-	  It's main chip type and providing power features like auxadc,
-	  buck/ldo, interrupt-controller..etc
-	  Set y to support this driver.
-	  Set n and choose other chip.
-
 config MTK_EXTBUCK
 	tristate "EXT BUCK Driver"
 	default n
