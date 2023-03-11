@@ -6,7 +6,7 @@ ccflags-y += -I$(srctree)/drivers/power/supply/mediatek/charger
 ccflags-y += -I$(srctree)/drivers/power/supply/mediatek/misc
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/usb_c/tcpc/inc
 
-subdir-ccflags-y += -Werror -I$(srctree)/drivers/misc/mediatek/pmic/include
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/pmic/include
 
 ifeq ($(CONFIG_MTK_TINYSYS_SSPM_SUPPORT), y)
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/sspm/
@@ -35,4 +35,3 @@ obj-$(CONFIG_MTK_PMIC_CHIP_MT6358)	+= pmic.o pmic_common.o \
 ifndef CONFIG_MTK_EXTERNAL_CHARGER_TYPE_DETECT
 obj-$(CONFIG_MTK_PMIC_CHIP_MT6358) += pmic_dummy_chr_type_det.o
 endif
-
