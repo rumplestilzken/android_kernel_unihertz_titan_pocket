@@ -50,7 +50,7 @@
 DEFINE_MUTEX(kexec_mutex);
 
 /* Per cpu memory for storing cpu states in case of system crash. */
-note_buf_t __percpu *crash_notes;
+__weak note_buf_t __percpu *crash_notes;
 
 /* Flag to indicate we are going to kexec a new kernel */
 bool kexec_in_progress = false;
@@ -1049,7 +1049,7 @@ unlock:
 	return ret;
 }
 
-void crash_save_cpu(struct pt_regs *regs, int cpu)
+__weak void crash_save_cpu(struct pt_regs *regs, int cpu)
 {
 	struct elf_prstatus prstatus;
 	u32 *buf;
