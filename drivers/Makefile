@@ -186,7 +186,3 @@ obj-$(CONFIG_TEE)		+= tee/
 obj-$(CONFIG_MULTIPLEXER)	+= mux/
 obj-$(CONFIG_TRUSTY)	+= trusty/
 obj-$(CONFIG_GNSS)		+= gnss/
-
-#Titan
-obj-y += /misc/mediatek/pidmap/
-obj-y += /misc/mediatek/ext_gic/
