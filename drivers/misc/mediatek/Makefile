@@ -119,7 +119,6 @@ obj-y += pidmap/
 obj-$(CONFIG_MTK_RAM_CONSOLE) += ram_console/
 obj-$(CONFIG_MEDIATEK_SOLUTION)	+= aee/
 obj-$(CONFIG_MEDIATEK_SOLUTION) += sched/
-obj-$(CONFIG_USB_MTK_HDRC) += usb20/
 obj-$(CONFIG_MU3_PHY)   += mu3phy/
 obj-$(CONFIG_USB_MU3D_DRV)  += mu3d/
 obj-$(CONFIG_MTK_RTC)	+= rtc/
