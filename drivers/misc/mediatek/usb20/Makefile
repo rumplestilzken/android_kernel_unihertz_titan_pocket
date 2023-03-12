@@ -23,6 +23,7 @@ obj-$(CONFIG_MACH_MT6765) += $(subst ",,$(CONFIG_MTK_PLATFORM))/
 obj-$(CONFIG_MACH_MT6768) += $(subst ",,$(CONFIG_MTK_PLATFORM))/
 obj-$(CONFIG_MACH_MT6833) += mt6833/
 obj-$(CONFIG_MACH_MT8167) += $(subst ",,$(CONFIG_MTK_PLATFORM))/
+obj-$(CONFIG_MACH_MT6771) += $(subst ",,$(CONFIG_MTK_PLATFORM))/
 
 obj-$(CONFIG_USB_MTK_HDRC) += musb_hdrc.o
 musb_hdrc-$(CONFIG_USB_MTK_HDRC) := musb_core.o

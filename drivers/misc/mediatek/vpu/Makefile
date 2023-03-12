@@ -38,12 +38,12 @@ ifeq ($(CONFIG_MTK_QOS_V2),y)
 subdir-ccflags-y += -DENABLE_EARA_QOS
 endif
 
-# # FPGA environment
-# ifeq ($(CONFIG_MTK_FPGA),y)
-# subdir-ccflags-y += -DMTK_VPU_FPGA_PORTING
-# else ifeq ($(CONFIG_FPGA_EARLY_PORTING),y)
-# subdir-ccflags-y += -DMTK_VPU_FPGA_PORTING
-# endif
+# FPGA environment
+ifeq ($(CONFIG_MTK_FPGA),y)
+subdir-ccflags-y += -DMTK_VPU_FPGA_PORTING
+else ifeq ($(CONFIG_FPGA_EARLY_PORTING),y)
+subdir-ccflags-y += -DMTK_VPU_FPGA_PORTING
+endif
 
 # MDLA config
 ifeq ($(CONFIG_MTK_MDLA_SUPPORT),y)
