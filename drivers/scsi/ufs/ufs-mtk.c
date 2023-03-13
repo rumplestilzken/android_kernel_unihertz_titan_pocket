@@ -43,7 +43,7 @@
 #include <linux/crc16.h>
 #endif
 
-#include "mtk_spm_resource_req.h"
+#include <mtk_spm_resource_req.h>
 
 /* Query request retries */
 #define QUERY_REQ_RETRIES 10

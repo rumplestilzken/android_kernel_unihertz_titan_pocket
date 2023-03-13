@@ -12,8 +12,8 @@
 #ifndef _UFS_MTK_PLATFORM_H
 #define _UFS_MTK_PLATFORM_H
 
-#include "ufs.h"
-#include "ufshcd.h"
+#include <ufs.h>
+#include <ufshcd.h>
 
 /*
  * Platform dependent quirks
@@ -81,4 +81,3 @@ extern unsigned short pmic_set_register_value_nolock(
 #endif
 
 #endif /* _UFS_MTK_PLATFORM_H */
-
