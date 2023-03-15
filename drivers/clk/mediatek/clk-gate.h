@@ -74,6 +74,16 @@ struct clk *mtk_clk_register_gate(
 		.val = _val,				\
 }
 
+int mtk_clk_register_gates(struct device_node *node,
+			   const struct mtk_gate *clks, int num,
+			   struct clk_hw_onecell_data *clk_data);
+
+
+int mtk_clk_register_gates_with_dev(struct device_node *node,
+				  const struct mtk_gate *clks, int num,
+				  struct clk_hw_onecell_data *clk_data,
+				  struct device *dev);
+
 void mtk_clk_unregister_gates(const struct mtk_gate *clks, int num,
 			      struct clk_hw_onecell_data *clk_data);
 
