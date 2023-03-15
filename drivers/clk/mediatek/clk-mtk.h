@@ -50,7 +50,7 @@ struct mtk_fixed_clk {
 	}
 
 void mtk_clk_register_fixed_clks(const struct mtk_fixed_clk *clks,
-		int num, struct clk_onecell_data *clk_data);
+		int num, struct clk_hw_onecell_data *clk_data);
 
 struct mtk_fixed_factor {
 	int id;
@@ -89,7 +89,7 @@ struct mtk_fixed_factor_pdn {
 	}
 
 void mtk_clk_register_factors(const struct mtk_fixed_factor *clks,
-		int num, struct clk_onecell_data *clk_data);
+		int num, struct clk_hw_onecell_data *clk_data);
 
 void mtk_clk_register_factors_pdn(const struct mtk_fixed_factor_pdn *clks,
 		int num, struct clk_onecell_data *clk_data, void __iomem *base);
@@ -207,7 +207,7 @@ struct mtk_gate {
 
 int mtk_clk_register_gates(struct device_node *node,
 			const struct mtk_gate *clks, int num,
-			struct clk_onecell_data *clk_data);
+			struct clk_hw_onecell_data *clk_data);
 
 struct mtk_clk_divider {
 	int id;
@@ -240,7 +240,7 @@ void mtk_clk_register_fixup_dividers(const struct mtk_clk_divider *mcds,
 			int num, void __iomem *base, spinlock_t *lock,
 				struct clk_onecell_data *clk_data);
 
-struct clk_onecell_data *mtk_alloc_clk_data(unsigned int clk_num);
+struct clk_hw_onecell_data *mtk_alloc_clk_data(unsigned int clk_num);
 
 #define HAVE_RST_BAR		BIT(0)
 #define PLL_AO			BIT(1)
