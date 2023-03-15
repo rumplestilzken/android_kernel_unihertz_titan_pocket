@@ -49,7 +49,7 @@ struct mtk_fixed_clk {
 		.rate = _rate,				\
 	}
 
-void mtk_clk_register_fixed_clks(const struct mtk_fixed_clk *clks,
+int mtk_clk_register_fixed_clks(const struct mtk_fixed_clk *clks,
 		int num, struct clk_hw_onecell_data *clk_data);
 
 struct mtk_fixed_factor {
