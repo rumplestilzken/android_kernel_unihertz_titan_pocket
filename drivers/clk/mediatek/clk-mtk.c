@@ -14,37 +14,27 @@
 
 #include <linux/of.h>
 #include <linux/of_address.h>
-#include <linux/of_device.h>
-#include <linux/platform_device.h>
 #include <linux/err.h>
 #include <linux/io.h>
 #include <linux/slab.h>
 #include <linux/delay.h>
 #include <linux/clkdev.h>
 #include <linux/mfd/syscon.h>
-#include <linux/overflow.h>
+#include <linux/of.h>
+#include <linux/of_address.h>
+#include <linux/of_device.h>
+#include <linux/platform_device.h>
 
 #include "clk-mtk.h"
 #include "clk-gate.h"
 #include "clk-fixup-div.h"
 #include "clk-mux.h"
 
-static void mtk_init_clk_data(struct clk_hw_onecell_data *clk_data,
-			      unsigned int clk_num)
-{
-	int i;
-
-	clk_data->num = clk_num;
-
-	for (i = 0; i < clk_num; i++)
-		clk_data->hws[i] = ERR_PTR(-ENOENT);
-}
-
 struct clk_hw_onecell_data *mtk_alloc_clk_data(unsigned int clk_num)
 {
 	struct clk_hw_onecell_data *clk_data;
 
-	clk_data = kzalloc(struct_size(clk_data, hws, clk_num), GFP_KERNEL);
+	clk_data = kzalloc(struct_size(clk_data, clk_data->hws, clk_num), GFP_KERNEL);
 	if (!clk_data)
 		return NULL;
 
@@ -155,52 +145,31 @@ void mtk_clk_unregister_fixed_clks(const struct mtk_fixed_clk *clks, int num,
 }
 EXPORT_SYMBOL_GPL(mtk_clk_unregister_fixed_clks);
 
-int mtk_clk_register_factors(const struct mtk_fixed_factor *clks, int num,
-			     struct clk_hw_onecell_data *clk_data)
+void mtk_clk_register_factors(const struct mtk_fixed_factor *clks,
+		int num, struct clk_hw_onecell_data *clk_data)
 {
 	int i;
-	struct clk_hw *hw;
-
-	if (!clk_data)
-		return -ENOMEM;
+	struct clk *clk;
 
 	for (i = 0; i < num; i++) {
 		const struct mtk_fixed_factor *ff = &clks[i];
 
-		if (!IS_ERR_OR_NULL(clk_data->hws[ff->id])) {
-			pr_warn("Trying to register duplicate clock ID: %d\n", ff->id);
+		if (clk_data && !IS_ERR_OR_NULL(clk_data->clks[ff->id]))
+			continue;
+
+		clk = clk_register_fixed_factor(NULL, ff->name, ff->parent_name,
+				CLK_SET_RATE_PARENT, ff->mult, ff->div);
+
+		if (IS_ERR(clk)) {
+			pr_err("Failed to register clk %s: %ld\n",
+					ff->name, PTR_ERR(clk));
 			continue;
 		}
 
-		hw = clk_hw_register_fixed_factor(NULL, ff->name, ff->parent_name,
-				ff->flags, ff->mult, ff->div);
-
-		if (IS_ERR(hw)) {
-			pr_err("Failed to register clk %s: %pe\n", ff->name,
-			       hw);
-			goto err;
-		}
-
-		clk_data->hws[ff->id] = hw;
+		if (clk_data)
+			clk_data->clks[ff->id] = clk;
 	}
-
-	return 0;
-
-err:
-	while (--i >= 0) {
-		const struct mtk_fixed_factor *ff = &clks[i];
-
-		if (IS_ERR_OR_NULL(clk_data->hws[ff->id]))
-			continue;
-
-		clk_hw_unregister_fixed_factor(clk_data->hws[ff->id]);
-		clk_data->hws[ff->id] = ERR_PTR(-ENOENT);
-	}
-
-	return PTR_ERR(hw);
 }
-EXPORT_SYMBOL_GPL(mtk_clk_register_factors);
-
 #if defined(CONFIG_MACH_MT6739)
 void __init mtk_clk_register_factors_pdn(
 	const struct mtk_fixed_factor_pdn *clks,
@@ -228,6 +197,57 @@ void __init mtk_clk_register_factors_pdn(
 	}
 }
 #endif
+int mtk_clk_register_gates(struct device_node *node,
+		const struct mtk_gate *clks,
+		int num, struct clk_hw_onecell_data *clk_data)
+{
+	int i;
+	struct clk *clk;
+	struct regmap *regmap;
+	struct regmap *pwr_regmap;
+
+	if (!clk_data)
+		return -ENOMEM;
+
+	regmap = syscon_node_to_regmap(node);
+	if (IS_ERR(regmap)) {
+		pr_err("Cannot find regmap for %pOF: %ld\n", node,
+				PTR_ERR(regmap));
+		return PTR_ERR(regmap);
+	}
+
+	pwr_regmap = syscon_regmap_lookup_by_phandle(node, "pwr-regmap");
+	if (IS_ERR(pwr_regmap))
+		pwr_regmap = NULL;
+
+	for (i = 0; i < num; i++) {
+		const struct mtk_gate *gate = &clks[i];
+
+		if (!IS_ERR_OR_NULL(clk_data->clks[gate->id]))
+			continue;
+
+		clk = mtk_clk_register_gate(gate->name, gate->parent_name,
+				regmap,
+				gate->regs->set_ofs,
+				gate->regs->clr_ofs,
+				gate->regs->sta_ofs,
+				gate->shift,
+				gate->ops,
+				gate->flags,
+				gate->pwr_stat,
+				pwr_regmap);
+
+		if (IS_ERR(clk)) {
+			pr_err("Failed to register clk %s: %ld\n",
+					gate->name, PTR_ERR(clk));
+			continue;
+		}
+
+		clk_data->clks[gate->id] = clk;
+	}
+
+	return 0;
+}
 
 void mtk_clk_unregister_factors(const struct mtk_fixed_factor *clks, int num,
 				struct clk_hw_onecell_data *clk_data)
