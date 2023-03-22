@@ -300,26 +300,4 @@ static inline void mtk_register_reset_controller(struct device_node *np,
 int mtk_is_pll_enable(void);
 int mtk_is_cg_enable(void);
 
-struct mtk_clk_desc {
-	const struct mtk_gate *clks;
-	size_t num_clks;
-	const struct mtk_composite *composite_clks;
-	size_t num_composite_clks;
-	const struct mtk_fixed_clk *fixed_clks;
-	size_t num_fixed_clks;
-	const struct mtk_fixed_factor *factor_clks;
-	size_t num_factor_clks;
-	const struct mtk_mux *mux_clks;
-	size_t num_mux_clks;
-	const struct mtk_clk_rst_desc *rst_desc;
-	spinlock_t *clk_lock;
-	bool shared_io;
-
-	int (*clk_notifier_func)(struct device *dev, struct clk *clk);
-	unsigned int mfg_clk_idx;
-};
-
-int mtk_clk_simple_probe(struct platform_device *pdev);
-int mtk_clk_simple_remove(struct platform_device *pdev);
-
 #endif /* __DRV_CLK_MTK_H */

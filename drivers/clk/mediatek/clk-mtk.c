@@ -20,15 +20,10 @@
 #include <linux/delay.h>
 #include <linux/clkdev.h>
 #include <linux/mfd/syscon.h>
-#include <linux/of.h>
-#include <linux/of_address.h>
-#include <linux/of_device.h>
-#include <linux/platform_device.h>
 
 #include "clk-mtk.h"
 #include "clk-gate.h"
 #include "clk-fixup-div.h"
-#include "clk-mux.h"
 
 struct clk_onecell_data *mtk_alloc_clk_data(unsigned int clk_num)
 {
@@ -54,12 +49,6 @@ err_out:
 
 	return NULL;
 }
-
-void mtk_free_clk_data(struct clk_hw_onecell_data *clk_data)
-{
-	kfree(clk_data);
-}
-EXPORT_SYMBOL_GPL(mtk_free_clk_data);
 
 void mtk_clk_register_fixup_dividers(const struct mtk_clk_divider *mcds,
 			int num, void __iomem *base, spinlock_t *lock,
@@ -115,26 +104,6 @@ void mtk_clk_register_fixed_clks(const struct mtk_fixed_clk *clks,
 			clk_data->clks[rc->id] = clk;
 	}
 }
-
-void mtk_clk_unregister_fixed_clks(const struct mtk_fixed_clk *clks, int num,
-				   struct clk_hw_onecell_data *clk_data)
-{
-	int i;
-
-	if (!clk_data)
-		return;
-
-	for (i = num; i > 0; i--) {
-		const struct mtk_fixed_clk *rc = &clks[i - 1];
-
-		if (IS_ERR_OR_NULL(clk_data->hws[rc->id]))
-			continue;
-
-		clk_hw_unregister_fixed_rate(clk_data->hws[rc->id]);
-		clk_data->hws[rc->id] = ERR_PTR(-ENOENT);
-	}
-}
-EXPORT_SYMBOL_GPL(mtk_clk_unregister_fixed_clks);
 
 void mtk_clk_register_factors(const struct mtk_fixed_factor *clks,
 		int num, struct clk_onecell_data *clk_data)
@@ -239,70 +208,6 @@ int mtk_clk_register_gates(struct device_node *node,
 
 	return 0;
 }
-
-void mtk_clk_unregister_factors(const struct mtk_fixed_factor *clks, int num,
-				struct clk_hw_onecell_data *clk_data)
-{
-	int i;
-
-	if (!clk_data)
-		return;
-
-	for (i = num; i > 0; i--) {
-		const struct mtk_fixed_factor *ff = &clks[i - 1];
-
-		if (IS_ERR_OR_NULL(clk_data->hws[ff->id]))
-			continue;
-
-		clk_hw_unregister_fixed_factor(clk_data->hws[ff->id]);
-		clk_data->hws[ff->id] = ERR_PTR(-ENOENT);
-	}
-}
-EXPORT_SYMBOL_GPL(mtk_clk_unregister_factors);
-
-static void mtk_clk_unregister_composite(struct clk_hw *hw)
-{
-	struct clk_composite *composite;
-	struct clk_mux *mux = NULL;
-	struct clk_gate *gate = NULL;
-	struct clk_divider *div = NULL;
-
-	if (!hw)
-		return;
-
-	composite = to_clk_composite(hw);
-	if (composite->mux_hw)
-		mux = to_clk_mux(composite->mux_hw);
-	if (composite->gate_hw)
-		gate = to_clk_gate(composite->gate_hw);
-	if (composite->rate_hw)
-		div = to_clk_divider(composite->rate_hw);
-
-	clk_hw_unregister_composite(hw);
-	kfree(div);
-	kfree(gate);
-	kfree(mux);
-}
-
-void mtk_clk_unregister_composites(const struct mtk_composite *mcs, int num,
-				   struct clk_hw_onecell_data *clk_data)
-{
-	int i;
-
-	if (!clk_data)
-		return;
-
-	for (i = num; i > 0; i--) {
-		const struct mtk_composite *mc = &mcs[i - 1];
-
-		if (IS_ERR_OR_NULL(clk_data->hws[mc->id]))
-			continue;
-
-		mtk_clk_unregister_composite(clk_data->hws[mc->id]);
-		clk_data->hws[mc->id] = ERR_PTR(-ENOENT);
-	}
-}
-EXPORT_SYMBOL_GPL(mtk_clk_unregister_composites);
 
 struct clk *mtk_clk_register_composite(const struct mtk_composite *mc,
 		void __iomem *base, spinlock_t *lock)
@@ -444,151 +349,3 @@ void mtk_clk_register_dividers(const struct mtk_clk_divider *mcds,
 			clk_data->clks[mcd->id] = clk;
 	}
 }
-
-int mtk_clk_simple_probe(struct platform_device *pdev)
-{
-	const struct mtk_clk_desc *mcd;
-	struct clk_hw_onecell_data *clk_data;
-	struct device_node *node = pdev->dev.of_node;
-	void __iomem *base;
-	int num_clks, r;
-
-	mcd = of_device_get_match_data(&pdev->dev);
-	if (!mcd)
-		return -EINVAL;
-
-	/* Composite clocks needs us to pass iomem pointer */
-	if (mcd->composite_clks) {
-		if (!mcd->shared_io)
-			base = devm_platform_ioremap_resource(pdev, 0);
-		else
-			base = of_iomap(node, 0);
-
-		if (IS_ERR_OR_NULL(base))
-			return IS_ERR(base) ? PTR_ERR(base) : -ENOMEM;
-	}
-
-	/* Calculate how many clk_hw_onecell_data entries to allocate */
-	num_clks = mcd->num_clks + mcd->num_composite_clks;
-	num_clks += mcd->num_fixed_clks + mcd->num_factor_clks;
-	num_clks += mcd->num_mux_clks;
-
-	clk_data = mtk_alloc_clk_data(num_clks);
-	if (!clk_data)
-		return -ENOMEM;
-
-	if (mcd->fixed_clks) {
-		r = mtk_clk_register_fixed_clks(mcd->fixed_clks,
-						mcd->num_fixed_clks, clk_data);
-		if (r)
-			goto free_data;
-	}
-
-	if (mcd->factor_clks) {
-		r = mtk_clk_register_factors(mcd->factor_clks,
-					     mcd->num_factor_clks, clk_data);
-		if (r)
-			goto unregister_fixed_clks;
-	}
-
-	if (mcd->mux_clks) {
-		r = mtk_clk_register_muxes(&pdev->dev, mcd->mux_clks,
-					   mcd->num_mux_clks, node,
-					   mcd->clk_lock, clk_data);
-		if (r)
-			goto unregister_factors;
-	}
-
-	if (mcd->composite_clks) {
-		/* We don't check composite_lock because it's optional */
-		r = mtk_clk_register_composites(&pdev->dev,
-						mcd->composite_clks,
-						mcd->num_composite_clks,
-						base, mcd->clk_lock, clk_data);
-		if (r)
-			goto unregister_muxes;
-	}
-
-	if (mcd->clks) {
-		r = mtk_clk_register_gates(node, mcd->clks,
-					   mcd->num_clks, clk_data);
-		if (r)
-			goto unregister_composites;
-	}
-
-	if (mcd->clk_notifier_func) {
-		struct clk *mfg_mux = clk_data->hws[mcd->mfg_clk_idx]->clk;
-
-		r = mcd->clk_notifier_func(&pdev->dev, mfg_mux);
-		if (r)
-			goto unregister_clks;
-	}
-
-	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
-	if (r)
-		goto unregister_clks;
-
-	platform_set_drvdata(pdev, clk_data);
-
-	if (mcd->rst_desc) {
-		r = mtk_register_reset_controller_with_dev(&pdev->dev,
-							   mcd->rst_desc);
-		if (r)
-			goto unregister_clks;
-	}
-
-	return r;
-
-unregister_clks:
-	if (mcd->clks)
-		mtk_clk_unregister_gates(mcd->clks, mcd->num_clks, clk_data);
-unregister_composites:
-	if (mcd->composite_clks)
-		mtk_clk_unregister_composites(mcd->composite_clks,
-					      mcd->num_composite_clks, clk_data);
-unregister_muxes:
-	if (mcd->mux_clks)
-		mtk_clk_unregister_muxes(mcd->mux_clks,
-					 mcd->num_mux_clks, clk_data);
-unregister_factors:
-	if (mcd->factor_clks)
-		mtk_clk_unregister_factors(mcd->factor_clks,
-					   mcd->num_factor_clks, clk_data);
-unregister_fixed_clks:
-	if (mcd->fixed_clks)
-		mtk_clk_unregister_fixed_clks(mcd->fixed_clks,
-					      mcd->num_fixed_clks, clk_data);
-free_data:
-	mtk_free_clk_data(clk_data);
-	if (mcd->shared_io && base)
-		iounmap(base);
-	return r;
-}
-EXPORT_SYMBOL_GPL(mtk_clk_simple_probe);
-
-int mtk_clk_simple_remove(struct platform_device *pdev)
-{
-	const struct mtk_clk_desc *mcd = of_device_get_match_data(&pdev->dev);
-	struct clk_hw_onecell_data *clk_data = platform_get_drvdata(pdev);
-	struct device_node *node = pdev->dev.of_node;
-
-	of_clk_del_provider(node);
-	if (mcd->clks)
-		mtk_clk_unregister_gates(mcd->clks, mcd->num_clks, clk_data);
-	if (mcd->composite_clks)
-		mtk_clk_unregister_composites(mcd->composite_clks,
-					      mcd->num_composite_clks, clk_data);
-	if (mcd->mux_clks)
-		mtk_clk_unregister_muxes(mcd->mux_clks,
-					 mcd->num_mux_clks, clk_data);
-	if (mcd->factor_clks)
-		mtk_clk_unregister_factors(mcd->factor_clks,
-					   mcd->num_factor_clks, clk_data);
-	if (mcd->fixed_clks)
-		mtk_clk_unregister_fixed_clks(mcd->fixed_clks,
-					      mcd->num_fixed_clks, clk_data);
-	mtk_free_clk_data(clk_data);
-
-	return 0;
-}
-EXPORT_SYMBOL_GPL(mtk_clk_simple_remove);

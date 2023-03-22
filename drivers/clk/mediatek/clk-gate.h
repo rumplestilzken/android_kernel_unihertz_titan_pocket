@@ -74,7 +74,4 @@ struct clk *mtk_clk_register_gate(
 		.val = _val,				\
 }
 
-void mtk_clk_unregister_gates(const struct mtk_gate *clks, int num,
-			      struct clk_hw_onecell_data *clk_data);
-
 #endif /* __DRV_CLK_GATE_H */
