@@ -34,7 +34,7 @@ struct clk_hw_onecell_data *mtk_alloc_clk_data(unsigned int clk_num)
 {
 	struct clk_hw_onecell_data *clk_data;
 
-	clk_data = kzalloc(struct_size(clk_data, clk_data->hws, clk_num), GFP_KERNEL);
+	clk_data = kzalloc(struct_size(clk_data, hws, clk_num), GFP_KERNEL);
 	if (!clk_data)
 		return NULL;
 
@@ -79,51 +79,31 @@ void mtk_clk_register_fixup_dividers(const struct mtk_clk_divider *mcds,
 	}
 }
 
-int mtk_clk_register_fixed_clks(const struct mtk_fixed_clk *clks, int num,
-				struct clk_hw_onecell_data *clk_data)
+void mtk_clk_register_fixed_clks(const struct mtk_fixed_clk *clks,
+		int num, struct clk_hw_onecell_data *clk_data)
 {
 	int i;
-	struct clk_hw *hw;
-
-	if (!clk_data)
-		return -ENOMEM;
+	struct clk *clk;
 
 	for (i = 0; i < num; i++) {
 		const struct mtk_fixed_clk *rc = &clks[i];
 
-		if (!IS_ERR_OR_NULL(clk_data->hws[rc->id])) {
-			pr_warn("Trying to register duplicate clock ID: %d\n", rc->id);
+		if (clk_data && !IS_ERR_OR_NULL(clk_data->clks[rc->id]))
 			continue;
-		}
 
-		hw = clk_hw_register_fixed_rate(NULL, rc->name, rc->parent, 0,
+		clk = clk_register_fixed_rate(NULL, rc->name, rc->parent, 0,
 					      rc->rate);
 
-		if (IS_ERR(hw)) {
-			pr_err("Failed to register clk %s: %pe\n", rc->name,
-			       hw);
-			goto err;
+		if (IS_ERR(clk)) {
+			pr_err("Failed to register clk %s: %ld\n",
+					rc->name, PTR_ERR(clk));
+			continue;
 		}
 
-		clk_data->hws[rc->id] = hw;
+		if (clk_data)
+			clk_data->clks[rc->id] = clk;
 	}
-
-	return 0;
-
-err:
-	while (--i >= 0) {
-		const struct mtk_fixed_clk *rc = &clks[i];
-
-		if (IS_ERR_OR_NULL(clk_data->hws[rc->id]))
-			continue;
-
-		clk_hw_unregister_fixed_rate(clk_data->hws[rc->id]);
-		clk_data->hws[rc->id] = ERR_PTR(-ENOENT);
-	}
-
-	return PTR_ERR(hw);
 }
-EXPORT_SYMBOL_GPL(mtk_clk_register_fixed_clks);
 
 void mtk_clk_unregister_fixed_clks(const struct mtk_fixed_clk *clks, int num,
 				   struct clk_hw_onecell_data *clk_data)
