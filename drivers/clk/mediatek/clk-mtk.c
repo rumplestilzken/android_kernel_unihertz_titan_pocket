@@ -30,19 +30,30 @@
 #include "clk-fixup-div.h"
 #include "clk-mux.h"
 
-struct clk_hw_onecell_data *mtk_alloc_clk_data(unsigned int clk_num)
+struct clk_onecell_data *mtk_alloc_clk_data(unsigned int clk_num)
 {
-	struct clk_hw_onecell_data *clk_data;
+	int i;
+	struct clk_onecell_data *clk_data;
 
-	clk_data = kzalloc(struct_size(clk_data, hws, clk_num), GFP_KERNEL);
+	clk_data = kzalloc(sizeof(*clk_data), GFP_KERNEL);
 	if (!clk_data)
 		return NULL;
 
-	mtk_init_clk_data(clk_data, clk_num);
+	clk_data->clks = kcalloc(clk_num, sizeof(*clk_data->clks), GFP_KERNEL);
+	if (!clk_data->clks)
+		goto err_out;
+
+	clk_data->clk_num = clk_num;
+
+	for (i = 0; i < clk_num; i++)
+		clk_data->clks[i] = ERR_PTR(-ENOENT);
 
 	return clk_data;
+err_out:
+	kfree(clk_data);
+
+	return NULL;
 }
-EXPORT_SYMBOL_GPL(mtk_alloc_clk_data);
 
 void mtk_free_clk_data(struct clk_hw_onecell_data *clk_data)
 {
@@ -80,7 +91,7 @@ void mtk_clk_register_fixup_dividers(const struct mtk_clk_divider *mcds,
 }
 
 void mtk_clk_register_fixed_clks(const struct mtk_fixed_clk *clks,
-		int num, struct clk_hw_onecell_data *clk_data)
+		int num, struct clk_onecell_data *clk_data)
 {
 	int i;
 	struct clk *clk;
@@ -126,7 +137,7 @@ void mtk_clk_unregister_fixed_clks(const struct mtk_fixed_clk *clks, int num,
 EXPORT_SYMBOL_GPL(mtk_clk_unregister_fixed_clks);
 
 void mtk_clk_register_factors(const struct mtk_fixed_factor *clks,
-		int num, struct clk_hw_onecell_data *clk_data)
+		int num, struct clk_onecell_data *clk_data)
 {
 	int i;
 	struct clk *clk;
@@ -179,7 +190,7 @@ void __init mtk_clk_register_factors_pdn(
 #endif
 int mtk_clk_register_gates(struct device_node *node,
 		const struct mtk_gate *clks,
-		int num, struct clk_hw_onecell_data *clk_data)
+		int num, struct clk_onecell_data *clk_data)
 {
 	int i;
 	struct clk *clk;
