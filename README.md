@@ -21,7 +21,6 @@ export CONFIG_MTK_GPIO=y # fixes pinctrl-mtk-common-v2_debug duplicate functions
 
 Modify include/kernel/config/auto.conf key CONFIG_SYSTEM_TRUSTED_KEYS value to ""
 
-This operation is going to take a *very* long time.
 ```
 make ARCH=arm64 titan_ufs_defconf
 make ARCH=arm64
