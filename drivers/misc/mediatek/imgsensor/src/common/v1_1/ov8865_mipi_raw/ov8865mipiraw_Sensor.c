@@ -2327,7 +2327,7 @@ static struct SENSOR_FUNCTION_STRUCT sensor_func = {
 	close
 };
 
-UINT32 OV8865_MIPI_RAW_SensorInit(SENSOR_FUNCTION_STRUCT **pfFunc)
+UINT32 OV8865_MIPI_RAW_SensorInit(struct SENSOR_FUNCTION_STRUCT **pfFunc)
 {
 	/* To Do : Check Sensor status here */
 	if (pfFunc!=NULL)
